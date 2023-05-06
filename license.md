@@ -1,5 +1,5 @@
 ===========
-MIT Licence
+MIT License
 ===========
 
 Copyright 2023 Elmar Manarang

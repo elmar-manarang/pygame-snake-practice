@@ -13,7 +13,10 @@ TODO:
 - game over
     - pause the game
     - change snake head to ded
-    - add a button for restart
+    - add a button for restart (DONE)
 - options
     - volume slider
     - other random configs
+- issues:
+    - fix issue with the snake head going outside or going in the snake on game over
+    - fix issue with the control being unresponsive

@@ -34,10 +34,14 @@ class Engine:
 
             self.screen = screen
             self.clock = clock
-            self.board = Board(screen, self.increment_score)
+            self.board = Board(screen, self)
             self.interface = Interface(screen)
             self.crunch_sound = pygame.mixer.Sound('resources/crunch.wav')
             self.crunch_sound.set_volume(0.1)
+
+            self.start_state = True
+            self.pause_state = False
+            self.game_over_state = False
 
             self.initialized = True
 
@@ -51,9 +55,27 @@ class Engine:
             if event.type == pygame.QUIT:
                 self.game_exit()
             if event.type == BOARD_UPDATE_EVENT:
-                self.board.update()
+                if self.start_state == False and self.game_over_state == False:
+                    self.board.update()
             if event.type == pygame.KEYDOWN:
                 self.board.handle_keys(event)
+                self.handle_keys(event)
+                if self.start_state == True:
+                    self.start_state = False
+
+    def handle_keys(self, event):
+        if event.key == pygame.K_r:
+            if self.game_over_state == True:
+                self.restart_game()
+        elif event.key == pygame.K_ESCAPE:
+            self.game_exit()
+
+    def restart_game(self):
+        print("RESTARTING GAME")
+        self.start_state = True
+        self.game_over_state = False
+        self.board.restart()
+        self.interface.restart()
 
     def draw(self):
         self.board.draw()
@@ -81,3 +103,8 @@ class Engine:
     def increment_score(self):
         self.crunch_sound.play()
         self.interface.increment_score()
+    
+    def game_over(self):
+        print("GAME OVER")
+        self.game_over_state = True
+        self.interface.game_over()

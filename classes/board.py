@@ -3,35 +3,34 @@ from classes.fruit import Fruit
 from classes.snake import Snake
 from constants import BOARD_COLOR_BASE, GRASS_COLOR, MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, CELL_NO_X, CELL_NO_Y, CELL_SIZE
 
-def game_over():
-    print("GAME OVER")
-    pygame.quit()
-    sys.exit() #exit the application
-
 #handles in-game interaction
 class Board:
-    def __init__(self, screen, increment_score):
+    def __init__(self, screen, engine):
         screen.fill(BOARD_COLOR_BASE)
 
         self.screen = screen
         self.snake = Snake()
         self.fruit = Fruit(self.snake.get_snake())
-        self.increment_score = increment_score
+        self.engine = engine
+
+    def restart(self):
+        self.snake.spawn()
+        self.fruit.spawn(self.snake.get_snake())
 
     def check_fruit_collision(self):
         if self.fruit.pos == self.snake.get_snake_head():
             self.fruit.spawn(self.snake.get_snake())
             self.snake.grow()
-            self.increment_score()
+            self.engine.increment_score()
             print("snake eats fruit")
     
     def check_fail(self):
         if self.check_wall_collision():
             print("snake hits wall")
-            game_over()
+            self.engine.game_over()
         elif self.snake.check_snake_body_collision():
             print("snake hits itself")
-            game_over()
+            self.engine.game_over()
 
     def check_wall_collision(self):
         if not 0 <= self.snake.get_snake_head().x < CELL_NO_X:

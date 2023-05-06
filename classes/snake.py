@@ -4,11 +4,14 @@ from constants import CELL_SIZE, MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT
 
 class Snake:
     def __init__(self):
+        self.spawn()
+        self.init_snake_assets()
+
+    def spawn(self):
         self.body = [Vector2(7, 10), Vector2(6, 10), Vector2(5, 10)]
         self.key_direction = None
         self.direction = Vector2(1,0)
         self.last_block = None
-        self.init_snake_assets()
 
     def init_snake_assets(self):
         #TODO:: might move these assets as a helper variable
@@ -124,10 +127,11 @@ class Snake:
             self.direction = Vector2(1,0)
 
         #move the snake
-        self.last_block = self.body[-1]
-        body_copy = self.body[:-1]
-        body_copy.insert(0, body_copy[0] + self.direction)
-        self.body = body_copy[:]
+        if self.direction != Vector2(0,0):
+            self.last_block = self.body[-1]
+            body_copy = self.body[:-1]
+            body_copy.insert(0, body_copy[0] + self.direction)
+            self.body = body_copy[:]
 
     def grow(self):
         if self.last_block != None:
